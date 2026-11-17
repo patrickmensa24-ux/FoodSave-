@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodSave | Share Food, Reduce Waste</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f9f5;
+            color: #243329;
+            line-height: 1.6;
+        }
+
+        header {
+            background: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e9e1;
+        }
+
+        .logo {
+            color: #26734d;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: #243329;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .hero {
+            background: #e6f2e8;
+            padding: 65px 8%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(35px, 5vw, 55px);
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            color: #526257;
+            max-width: 650px;
+            margin: 0 auto 25px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #26734d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #195b3b;
+        }
+
+        .section {
+            padding: 45px 8%;
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #647066;
+            margin-bottom: 25px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e5e9e1;
+            max-width: 750px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccd5ca;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-card .button {
+            margin-top: 20px;
+        }
+
+        .message {
+            background: #e6f2e8;
+            color: #195b3b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+        }
+
+        .listing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .listing-card {
+            background: white;
+            border: 1px solid #e5e9e1;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .listing-card h3 {
+            color: #26734d;
+            margin-bottom: 8px;
+        }
+
+        .status {
+            display: inline-block;
+            background: #e6f2e8;
+            color: #195b3b;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .empty-state {
+            background: white;
+            border: 1px dashed #ccd5ca;
+            border-radius: 12px;
+            padding: 25px;
+            color: #647066;
+        }
+
+        footer {
+            padding: 25px;
+            background: #243329;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 750px) {
+            header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .form-grid, .listing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 35px 6%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">FoodSave</div>
+        <nav>
+    <a href="#home">Home</a>
+    <a href="#donate">Donate Food</a>
+    <a href="#listings">Available Food</a>
+    <a href="/manage-donations">Manage Donations</a>
+    <a href="/manage-requests">Manage Requests</a>
+    <a href="/dashboard">Dashboard</a>
+</nav>
+
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <h1>Good food deserves a second chance.</h1>
+            <p>
+                Share surplus food with your community. FoodSave aims to reduce
+                food waste and make food donations easier to discover.
+            </p>
+            <a class="button" href="#listings">Browse Food</a>
+        </section>
+
+        <section class="section" id="donate">
+            <h2>Donate Surplus Food</h2>
+            <p class="intro">
+                Have food you can safely share? Add its details below.
+            </p>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form class="form-card" action="{{ url_for('add_food') }}" method="POST">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="food_name">Food name *</label>
+                        <input id="food_name" name="food_name" required maxlength="100"
+                               placeholder="e.g. Tinned tomatoes">
+                    </div>
+
+                    <div class="field">
+                        <label for="quantity">Quantity *</label>
+                        <input id="quantity" name="quantity" type="number"
+                               min="1" max="100000" required placeholder="e.g. 10">
+                    </div>
+
+                    <div class="field full">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" maxlength="500"
+                                  placeholder="Add useful details about the food"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="location">Collection location *</label>
+                        <input id="location" name="location" required maxlength="200"
+                               placeholder="e.g. Ashton town centre">
+                    </div>
+
+                    <div class="field">
+                        <label for="expiry_date">Expiry date *</label>
+                        <input id="expiry_date" name="expiry_date" type="date" required>
+                    </div>
+
+                    <div class="field full">
+                        <label for="donor_name">Donor name *</label>
+                        <input id="donor_name" name="donor_name" required maxlength="100"
+                               placeholder="Your name or organisation">
+                    </div>
+                </div>
+
+                <button class="button" type="submit">Add Food Donation</button>
+            </form>
+        </section>
+
+        <section class="section" id="listings">
+            <h2>Available Food</h2>
+            <p class="intro">
+                Browse the food donations currently listed on FoodSave.
+            </p>
+
+            {% if listings %}
+                <div class="listing-grid">
+                    {% for food in listings %}
+                        <article class="listing-card">
+                            <h3>{{ food['food_name'] }}</h3>
+
+                            {% if food['description'] %}
+                                <p>{{ food['description'] }}</p>
+                            {% endif %}
+
+                            <p><strong>Quantity:</strong> {{ food['quantity'] }}</p>
+                            <p><strong>Location:</strong> {{ food['location'] }}</p>
+                            <p><strong>Expiry date:</strong> {{ food['expiry_date'] }}</p>
+                            <p><strong>Donor:</strong> {{ food['donor_name'] }}</p>
+
+                            <span class="status">{{ food['status'] }}</span>
+                            <a class="button" href="{{ url_for('request_food', food_id=food['id']) }}">Request Food</a>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>No food donations have been listed yet.</p>
+                    <p>Be the first to add a donation using the form above.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>FoodSave &copy; 2026 | Sharing food, reducing waste.</p>
+    </footer>
+</body>
+</html>

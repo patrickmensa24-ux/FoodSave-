@@ -1,0 +1,133 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Requests | FoodSave</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f4;
+            margin: 0;
+            padding: 30px 20px;
+            color: #26352b;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #247443;
+        }
+
+        .request-card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .request-card h2 {
+            margin-top: 0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 5px;
+            background: #fff0c2;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .approve {
+            background: #247443;
+        }
+
+        .reject {
+            background: #b83232;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #247443;
+        }
+
+        .empty {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a class="back" href="{{ url_for('home') }}">← Back to FoodSave</a>
+
+        <h1>Manage Food Requests</h1>
+        <p>Review requests submitted for donated food.</p>
+
+        {% for message in get_flashed_messages() %}
+            <p>{{ message }}</p>
+        {% endfor %}
+
+        {% if requests %}
+            {% for item in requests %}
+                <div class="request-card">
+                    <h2>{{ item['food_name'] }}</h2>
+
+                    <p><strong>Recipient:</strong> {{ item['recipient_name'] }}</p>
+                    <p><strong>Contact:</strong> {{ item['contact'] }}</p>
+                    <p><strong>Quantity requested:</strong> {{ item['requested_quantity'] }}</p>
+                    <p><strong>Available quantity:</strong> {{ item['available_quantity'] }}</p>
+                    <p><strong>Message:</strong> {{ item['message'] or 'No message provided' }}</p>
+
+                    <p>
+                        <strong>Request status:</strong>
+                        <span class="status">{{ item['status'] }}</span>
+                    </p>
+
+                    {% if item['status'] == 'Pending' %}
+                    <div class="actions">
+    <form method="POST" action="{{ url_for('update_request', request_id=item['id']) }}">
+        <input type="hidden" name="status" value="Approved">
+        <button class="approve" type="submit">Approve</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('update_request', request_id=item['id']) }}">
+        <input type="hidden" name="status" value="Rejected">
+        <button class="reject" type="submit">Reject</button>
+    </form>
+</div>
+{% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="empty">
+    <p>No food requests have been submitted yet.</p>
+</div>
+{% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Donations | FoodSave</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f4;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #246b45;
+        }
+
+        .donation-card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .status {
+            font-weight: bold;
+            color: #246b45;
+        }
+
+        a {
+            color: #246b45;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/">← Back to FoodSave</a>
+
+        <h1>Manage Food Donations</h1>
+        <p>View all food donations submitted to FoodSave.</p>
+
+        {% for food in listings %}
+        <div class="donation-card">
+            <h2>{{ food['food_name'] }}</h2>
+
+            <p><strong>Description:</strong>
+                {{ food['description'] or 'No description' }}</p>
+
+            <p><strong>Quantity:</strong>
+                {{ food['quantity'] }}</p>
+
+            <p><strong>Location:</strong>
+                {{ food['location'] }}</p>
+
+            <p><strong>Expiry date:</strong>
+                {{ food['expiry_date'] }}</p>
+
+            <p><strong>Donor:</strong>
+                {{ food['donor_name'] }}</p>
+
+            <p><strong>Status:</strong>
+                <span class="status">{{ food['status'] }}</span>
+            </p>
+            <form action="/delete-donation/{{ food['id'] }}" method="POST"
+      onsubmit="return confirm('Are you sure you want to delete this donation?');">
+    <button type="submit">Delete Donation</button>
+</form>
+        </div>
+        {% else %}
+            <p>No food donations have been added yet.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

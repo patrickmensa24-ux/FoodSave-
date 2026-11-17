@@ -1,0 +1,15 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FoodSave Dashboard</title>
+</head>
+<body>
+    <h1>FoodSave Dashboard</h1>
+    <p>Total donations: {{ stats["total_donations"] }}</p>
+    <p>Available food: {{ stats["available_food"] }}</p>
+    <p>Pending requests: {{ request_stats["pending_requests"] or 0 }}</p>
+    <p>Approved requests: {{ request_stats["approved_requests"] or 0 }}</p>
+    <a href="/">Back to FoodSave</a>
+</body>
+</html>

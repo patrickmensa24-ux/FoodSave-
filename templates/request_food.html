@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Food | FoodSave</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            font-family: Arial, sans-serif;
+            background: #f7f9f5;
+            color: #243329;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border: 1px solid #e5e9e1;
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: #26734d;
+            margin-top: 0;
+        }
+
+        .food-details {
+            padding: 16px;
+            margin: 20px 0;
+            background: #e6f2e8;
+            border-radius: 8px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd5ca;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 13px 20px;
+            background: #26734d;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #195b3b;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #26734d;
+        }
+
+        .note {
+            color: #647066;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Request Food</h1>
+
+        <p>Complete this form to request the food donation below.</p>
+
+        <div class="food-details">
+            <h2>{{ food['food_name'] }}</h2>
+            <p><strong>Quantity available:</strong> {{ food['quantity'] }}</p>
+            <p><strong>Collection location:</strong> {{ food['location'] }}</p>
+            <p><strong>Expiry date:</strong> {{ food['expiry_date'] }}</p>
+            <p class="note">Submitting a request does not guarantee collection. The donor must review it.</p>
+        </div>
+
+        <form action="{{ url_for('submit_request', food_id=food['id']) }}" method="POST">
+            <div class="field">
+                <label for="recipient_name">Your name *</label>
+                <input id="recipient_name" name="recipient_name"
+                       maxlength="100" required>
+            </div>
+
+            <div class="field">
+                <label for="contact">Contact details *</label>
+                <input id="contact" name="contact" type="text"
+                       maxlength="150" required
+                       placeholder="Email address or phone number">
+            </div>
+
+            <div class="field">
+                <label for="requested_quantity">Quantity requested *</label>
+                <input id="requested_quantity" name="requested_quantity"
+                       type="number" min="1" max="{{ food['quantity'] }}"
+                       value="1" required>
+            </div>
+
+            <div class="field">
+                <label for="message">Additional message (optional)</label>
+                <textarea id="message" name="message" maxlength="500"
+                          placeholder="Add any relevant information"></textarea>
+            </div>
+
+            <button type="submit">Submit Request</button>
+        </form>
+
+        <a class="back-link" href="{{ url_for('home') }}">Back to available food</a>
+    </main>
+</body>
+</html>
