@@ -1,15 +1,108 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodSave Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            background: #f4f7f5;
+            color: #26352b;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #237a45;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #68756c;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            border-left: 5px solid #31965a;
+        }
+
+        .card h2 {
+            font-size: 15px;
+            color: #68756c;
+            font-weight: normal;
+            margin: 0 0 15px;
+        }
+
+        .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #237a45;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 20px;
+            background: #237a45;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .back:hover {
+            background: #185d33;
+        }
+    </style>
 </head>
 <body>
-    <h1>FoodSave Dashboard</h1>
-    <p>Total donations: {{ stats["total_donations"] }}</p>
-    <p>Available food: {{ stats["available_food"] }}</p>
-    <p>Pending requests: {{ request_stats["pending_requests"] or 0 }}</p>
-    <p>Approved requests: {{ request_stats["approved_requests"] or 0 }}</p>
-    <a href="/">Back to FoodSave</a>
+    <div class="container">
+        <h1>FoodSave Dashboard</h1>
+        <p class="subtitle">Overview of food donations and requests.</p>
+
+        <div class="stats">
+            <div class="card">
+                <h2>Total Donations</h2>
+                <div class="number">{{ stats["total_donations"] }}</div>
+            </div>
+
+            <div class="card">
+                <h2>Available Food</h2>
+                <div class="number">{{ stats["available_food"] }}</div>
+            </div>
+
+            <div class="card">
+                <h2>Pending Requests</h2>
+                <div class="number">{{ request_stats["pending_requests"] or 0 }}</div>
+            </div>
+
+            <div class="card">
+                <h2>Approved Requests</h2>
+                <div class="number">{{ request_stats["approved_requests"] or 0 }}</div>
+            </div>
+        </div>
+
+        <a class="back" href="/">Back to FoodSave</a>
+    </div>
 </body>
 </html>
